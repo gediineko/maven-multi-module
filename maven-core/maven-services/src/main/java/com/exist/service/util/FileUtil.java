@@ -17,8 +17,8 @@ import java.util.Map;
 public class FileUtil {
     private static final String DIR_NAME = ".";
     private static final String FILE_NAME = "table";
-    public static final String ENTRY_DELIMITER = " \u037e "; //greek question mark
-    public static final String KEY_VALUE_DELIMITER = " \u2261 "; //triple bar
+    public static final String ENTRY_DELIMITER = " \t "; //greek question mark  ;
+    public static final String KEY_VALUE_DELIMITER = " \t\t "; //triple bar ≡
     public static TableModel readFile(){
         List<Map<String,String>> table = new LinkedList<Map<String,String>>();
         Path file = FileSystems.getDefault().getPath(DIR_NAME, FILE_NAME);

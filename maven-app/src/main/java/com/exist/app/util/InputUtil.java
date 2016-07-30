@@ -1,5 +1,7 @@
 package com.exist.app.util;
 
+import sun.misc.Service;
+
 import java.util.*;
 
 /**
@@ -45,7 +47,37 @@ public class InputUtil {
         return opt;
     }
     public static String getKeyword(){
-        String kw = scanner.nextLine();
-        return kw;
+        return scanner.nextLine();
+    }
+
+    public static int getEditIndex(String type, int size) {
+        boolean isValid;
+        int index = 0;
+        do {
+            try {
+                isValid = true;
+                System.out.print(type + ": ");
+                index = scanner.nextInt();
+                if (index > size){
+                    isValid = false;
+                    System.out.println("[Invalid " + type + " value]");
+                }
+            } catch (InputMismatchException ex) {
+                System.out.println("[Invalid " + type + " value]");
+                scanner.nextLine();
+                isValid = false;
+            }
+        } while (!isValid);
+        return index;
+    }
+
+    public static int getEditKV(Integer... validOpts) {
+        int opt = scanner.nextInt();
+        scanner.nextLine();
+        List<Integer> validOptList = Arrays.asList(validOpts);
+        if(!validOptList.contains(opt)){
+            throw new IllegalArgumentException();
+        }
+        return opt;
     }
 }

@@ -85,4 +85,8 @@ public class TableService {
             System.out.println("[No data found]");
         }
     }
+
+    public List<Map<String, String>> getTable() {
+        return tableModel.getTable();
+    }
 }
