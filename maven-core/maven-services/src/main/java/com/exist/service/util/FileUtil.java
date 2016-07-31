@@ -1,6 +1,7 @@
 package com.exist.service.util;
 
 import com.exist.model.TableModel;
+import com.exist.model.constants.AppConstants;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -17,18 +18,16 @@ import java.util.Map;
 public class FileUtil {
     private static final String DIR_NAME = ".";
     private static final String FILE_NAME = "table";
-    public static final String ENTRY_DELIMITER = " \u037e "; //greek question mark
-    public static final String KEY_VALUE_DELIMITER = " \u2261 "; //triple bar
     public static TableModel readFile(){
         List<Map<String,String>> table = new LinkedList<Map<String,String>>();
         Path file = FileSystems.getDefault().getPath(DIR_NAME, FILE_NAME);
         try (InputStream in = Files.newInputStream(file);
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))){
-            String line = null;
+            String line;
             while((line = reader.readLine()) != null){
                 Map<String,String> row = new LinkedHashMap<String,String>();
-                for (String entry : line.split(ENTRY_DELIMITER)){
-                    String[] keyValue = entry.split(KEY_VALUE_DELIMITER);
+                for (String entry : line.split(AppConstants.ENTRY_DELIMITER)){
+                    String[] keyValue = entry.split(AppConstants.KEY_VALUE_DELIMITER);
                     row.put(keyValue[0],keyValue[1]);
                 }
                 table.add(row);
@@ -53,7 +52,7 @@ public class FileUtil {
             for(Map<String, String> row : tableModel.getTable()){
                 StringBuilder newRow = new StringBuilder();
                 for(Map.Entry<String, String> entry : row.entrySet()){
-                    newRow.append(entry.getKey()).append(KEY_VALUE_DELIMITER).append(entry.getValue()).append(ENTRY_DELIMITER);
+                    newRow.append(entry.getKey()).append(AppConstants.KEY_VALUE_DELIMITER).append(entry.getValue()).append(AppConstants.ENTRY_DELIMITER);
                 }
                 bw.write(newRow.toString());
                 bw.newLine();

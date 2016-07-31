@@ -3,7 +3,7 @@ package com.exist.app;
 import com.exist.app.util.InputUtil;
 import com.exist.service.TableService;
 
-import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -23,6 +23,7 @@ public class App {
     public void run() {
         if (tableService.tableFileExist()) {
             tableService.loadTable();
+            System.out.println("File loaded!");
         } else {
             initTable();
         }
@@ -30,17 +31,13 @@ public class App {
     }
 
     public void menu() {
-        int opt;
+
         boolean cont;
         do {
+            int opt = 0;
             cont = true;
-            try {
-                String menu = "Menu: [1 Search] [2 Edit] [3 Print] [4 Add Row] [5 Sort] [6 Reset] [7 Exit]";
-                opt = InputUtil.getMenuOption(menu, 1, 2, 3, 4, 5, 6, 7);
-            } catch (InputMismatchException | IllegalArgumentException ex) {
-                System.out.println("[Invalid option]");
-                break;
-            }
+            String menu = "\nMenu: [1 Search] [2 Edit] [3 Print] [4 Add Row] [5 Sort] [6 Reset] [7 Exit]";
+            opt = InputUtil.getMenuOption(menu);
             switch (opt) {
                 case 1:
                     searchTable();
@@ -52,16 +49,19 @@ public class App {
                     printTable();
                     break;
                 case 4:
-//                    addRow();
+                    addRow();
                     break;
                 case 5:
-//                    sort();
+                    sort();
                     break;
                 case 6:
                     initTable();
                     break;
                 case 7:
                     cont = false;
+                    break;
+                default:
+                    System.out.println("[Choose only from 1 to 7]");
                     break;
             }
         } while (cont);
@@ -78,7 +78,25 @@ public class App {
     public void searchTable() {
         System.out.print("Search for: ");
         String keyword = InputUtil.getKeyword();
-        tableService.searchTable(keyword);
+        //Check if char is found on list of map
+        if (tableService.searchTable(keyword).size() > 0) {
+            int keyCount = 0;
+            int valueCount = 0;
+            System.out.print("Result(s): ");
+            for (Map<String, String> entry : tableService.searchTable(keyword)) {
+                System.out.print("\n" + "[" + entry.get("x") + "," + entry.get("y") + "] : " + entry.get("entryType"));
+                if (entry.get("entryType").equals("KEY")) {
+                    keyCount++;
+                } else {
+                    valueCount++;
+                }
+            }
+            System.out.println("\nOccurrences as KEY: " + keyCount);
+            System.out.println("Occurrences as VALUE: " + valueCount);
+            System.out.println("Total occurrences: " + (keyCount + valueCount));
+        } else {
+            System.out.println("[No data found]");
+        }
     }
 
     public void printTable() {
@@ -90,17 +108,39 @@ public class App {
         }
     }
 
-    public void editTable(){
-        System.out.println("Enter index of set to edit: ");
+    public void editTable() {
+        System.out.println("[Enter index of set to edit]");
         int rowIndex = InputUtil.getEditIndex("Row", tableService.getTable().size());
         int columnIndex = InputUtil.getEditIndex("Column", tableService.getTable().get(rowIndex).size());
-        int opt;
-        try {
-            System.out.println("Which would you like to edit? [1 Key] [2 Value]");
-            opt = InputUtil.getEditKV(1,2);
-        } catch (InputMismatchException ex){
-            System.out.println("[Invalid option]");
-        }
+        String kvMenu = "Which would you like to edit? [1 Key] [2 Value]";
+        int kv = InputUtil.getEditKV(kvMenu);
+        String newKV = InputUtil.getNewValue(tableService.getTable().get(rowIndex).keySet(), kv);
+        tableService.addNewValue(rowIndex, columnIndex, kv, newKV);
+    }
 
+    public void addRow() {
+        System.out.println("Adding new row...\nInput " + tableService.getTable().get(0).size()
+                + " key and value pairs separated by commas.\nex: key,value");
+        //Get KV pairs for new row
+        Map<String, String> newRow = new LinkedHashMap<String, String>();
+        for (int y = 0; y < tableService.getTable().get(0).size(); y++) {
+            boolean isValid;
+            do {
+                try {
+                    System.out.print("[Pair #" + (y + 1) + "] ");
+                    isValid = InputUtil.addNewValidPair(newRow);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    isValid = false;
+                    System.out.println("[Invalid pair input]");
+                }
+            } while (!isValid);
+
+        }
+        tableService.addRow(newRow);
+    }
+
+    public void sort() {
+        tableService.sort();
+        System.out.println("Table sorted!");
     }
 }
