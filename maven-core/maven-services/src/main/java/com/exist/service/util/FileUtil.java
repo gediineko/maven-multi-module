@@ -7,20 +7,18 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by NazIsEvil on 30/07/2016.
  */
 public class FileUtil {
-    private static final String DIR_NAME = ".";
     private static final String FILE_NAME = "table";
+    private static final String CONFIG = "config.properties";
+
     public static TableModel readFile(){
         List<Map<String,String>> table = new LinkedList<Map<String,String>>();
-        Path file = FileSystems.getDefault().getPath(DIR_NAME, FILE_NAME);
+        Path file = FileSystems.getDefault().getPath(getFilePath(), FILE_NAME);
         try (InputStream in = Files.newInputStream(file);
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))){
             String line;
@@ -42,7 +40,7 @@ public class FileUtil {
     }
     public static void writeFile(TableModel tableModel){
         try {
-            File file = new File(DIR_NAME+File.separator+FILE_NAME);
+            File file = new File(getFilePath()+File.separator+FILE_NAME);
             if (file.exists()){
                 file.delete();
             }
@@ -65,7 +63,17 @@ public class FileUtil {
     }
 
     public static boolean checkFileExist(){
-        File file = new File(DIR_NAME+File.separator+FILE_NAME);
+        File file = new File(getFilePath()+File.separator+FILE_NAME);
         return file.exists();
+    }
+
+    private static String getFilePath(){
+        Properties prop = new Properties();
+        try (InputStream in = ClassLoader.getSystemResourceAsStream(CONFIG)){
+            prop.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return prop.getProperty("file.path");
     }
 }

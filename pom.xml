@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-
     <modules>
         <module>maven-app</module>
         <module>maven-core</module>
@@ -21,6 +20,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <maven-assembly-plugin.version>2.5.3</maven-assembly-plugin.version>
+        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -50,7 +50,31 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>current</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <file.path>.</file.path>
+            </properties>
+        </profile>
+        <profile>
+            <id>desktop</id>
+            <properties>
+                <file.path>${user.home}/Desktop</file.path>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -61,6 +85,11 @@
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${maven-assembly-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -73,6 +102,10 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
