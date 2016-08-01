@@ -3,9 +3,6 @@ package com.exist.model;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by NazIsEvil on 30/07/2016.
- */
 public class TableModel {
     private List<Map<String,String>> table;
 

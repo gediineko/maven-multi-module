@@ -9,9 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-/**
- * Created by NazIsEvil on 30/07/2016.
- */
 public class FileUtil {
     private static final String FILE_NAME = "table";
     private static final String CONFIG = "config.properties";

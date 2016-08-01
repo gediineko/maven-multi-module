@@ -6,9 +6,6 @@ import com.exist.service.TableService;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by NazIsEvil on 30/07/2016.
- */
 public class App {
     private TableService tableService;
 
@@ -25,6 +22,7 @@ public class App {
             tableService.loadTable();
             System.out.println("File loaded!");
         } else {
+            System.out.println("[File does not exist]");
             initTable();
         }
         menu();

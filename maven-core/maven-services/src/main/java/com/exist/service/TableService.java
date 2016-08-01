@@ -8,9 +8,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by NazIsEvil on 30/07/2016.
- */
 public class TableService {
     private TableModel tableModel;
 

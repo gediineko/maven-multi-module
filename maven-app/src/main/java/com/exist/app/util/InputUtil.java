@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-/**
- * Created by NazIsEvil on 30/07/2016.
- */
 public class InputUtil {
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -45,7 +42,7 @@ public class InputUtil {
         try {
             opt = scanner.nextInt();
         } catch (InputMismatchException | IllegalArgumentException ex) {
-            //Do nothing. Ignore invalid input. Let switch default handle
+            //Exception handled by switch default
         }
         scanner.nextLine();
         return opt;

@@ -4,3 +4,5 @@ out
 gen
 **/target/
 table
+maven-core/maven-services/target/
+maven-core/maven-model/target/
